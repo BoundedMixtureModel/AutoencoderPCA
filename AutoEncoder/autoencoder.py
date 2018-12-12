@@ -14,7 +14,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from tensorflow.python.client import device_lib
-from get_dataset import get_dataset
+from AutoEncoder.get_dataset import get_dataset
 from IPython.display import SVG
 from keras.utils.vis_utils import model_to_dot
 from keras.utils import plot_model
@@ -40,17 +40,17 @@ print(X_train.shape[0], 'sample,',X_train.shape[1] ,'x',X_train.shape[2] ,'size 
 print('Test shape:', X_test.shape)
 print(X_test.shape[0], 'sample,',X_test.shape[1] ,'x',X_test.shape[2] ,'size RGB image.\n')
 
-# print('Examples:')
-# n = 10
-# plt.figure(figsize=(20, 4))
-# for i in range(1, n+1):
-#     # Display some data:
-#     ax = plt.subplot(1, n, i)
-#     plt.imshow(X_train[i])
-#     ax.get_xaxis().set_visible(False)
-#     ax.get_yaxis().set_visible(False)
+print('Examples:')
+n = 10
+plt.figure(figsize=(20, 4))
+for i in range(1, n+1):
+    # Display some data:
+    ax = plt.subplot(1, n, i)
+    plt.imshow(X_train[i])
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
 # whether show the examples
-# plt.show()
+plt.show()
 
 X_train = X_train.reshape((len(X_train), np.prod(X_train.shape[1:])))
 X_test = X_test.reshape((len(X_test), np.prod(X_test.shape[1:])))
@@ -168,8 +168,6 @@ print(classification_report(Y_test, Y_pred))
 # Plot confusion matrix
 cm = confusion_matrix(Y_test, Y_pred)
 cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-# cm = cm.astype('float') / cm.astype(np.float).sum(axis=1)
-print(cm)
 
 df = pd.DataFrame(cm, classes, classes)
 plt.figure()

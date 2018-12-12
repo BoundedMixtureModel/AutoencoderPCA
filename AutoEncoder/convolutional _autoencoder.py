@@ -15,13 +15,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from tensorflow.python.client import device_lib
-from get_dataset import get_dataset
+from AutoEncoder.get_dataset import get_dataset
+from IPython.display import SVG
+from keras.utils.vis_utils import model_to_dot
+from keras.utils import plot_model
 
-# img = cv2.imread("data/train/Bedroom/image_0001.jpg", 0)
-# img = cv2.resize(img, (100, 100))
-# cv2.imshow('image', img)
-# cv2.waitKey(0)
-# cv2.destroyAllWindows()
 
 # configure the gpu
 # set log level
@@ -33,10 +31,8 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 print(device_lib.list_local_devices())
 
 # Getting Dataset:
-
 X_train, X_test, Y_train, Y_test = get_dataset()
 classes = ['cat', 'dog']
-
 # About Dataset:
 img_size = X_train.shape[1] # 64
 print('Training shape:', X_train.shape)
@@ -56,7 +52,6 @@ print("Compression factor: %s" % compression_factor)
 
 
 # this is our input placeholder
-print(input_dim)
 input_img = Input(shape=input_dim)
 x = Conv2D(32, (3, 3), activation='relu', padding='same')(input_img)
 x = MaxPooling2D((2, 2), padding='same')(x)
@@ -119,9 +114,7 @@ history = autoencoder.fit(X_train, X_train, epochs=5, batch_size=500, shuffle=Tr
 # Non-trainable params: 0
 # _________________________________________________________________
 print(autoencoder.summary())
-from IPython.display import SVG
-from keras.utils.vis_utils import model_to_dot
-from keras.utils import plot_model
+
 SVG(model_to_dot(autoencoder).create(prog='dot', format='svg'))
 plot_model(autoencoder, show_shapes=True, to_file='network.png')
 
@@ -165,11 +158,6 @@ for i in range(m):
 plt.show()
 
 # Using encoding layer with softmax layer to train a classifier
-# For a single-input model with 15 classes (categorical classification):
-# model = Sequential()
-# # autocoder is convolutional autoencoder
-# model.add(autoencoder)
-
 def fc(encode):
     flat = Flatten()(encode)
     den = Dense(950, activation='relu')(flat)
@@ -207,7 +195,7 @@ plt.legend()
 plt.show()
 
 #predicted labels/classes
-Y_pred = model.predict (X_test)
+Y_pred = model.predict(X_test)
 
 threshold = 0.5
 # Precision and recall

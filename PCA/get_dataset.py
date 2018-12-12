@@ -23,7 +23,6 @@ def get_dataset(dataset_path='Data'):
             X.append(img)
             Y.append(i)
 
-
     # Create dateset:
     X = np.array(X).astype('float32')/255.
     Y = np.array(Y).astype('float32')
